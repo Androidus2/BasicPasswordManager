@@ -2,12 +2,78 @@
 #include "stdlib.h"
 #include "time.h"
 #include "PasswordManager.h"
+#include "SFML/Graphics.hpp"
+#include "Button.h"
+#include "InputField.h"
+
+sf::Vector2f mousePos;
 
 int main()
 {
 	srand(time(NULL));
 
-	std::string masterKey;
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Basic Password Manager");
+
+	sf::Font font;
+	if (!font.loadFromFile("Resources/Roboto-Black.ttf"))
+	{
+		std::cout << "Failed to load font\n";
+		return 1;
+	}
+
+	sf::Text title;
+	title.setFont(font);
+	title.setString("Basic Password Manager");
+	title.setCharacterSize(24);
+	title.setFillColor(sf::Color::White);
+	title.setPosition(10, 10);
+
+	Button button;
+	button.SetPosition(150, 70);
+	button.SetSize(100, 50);
+	button.SetText("Add", font, 24, sf::Color::White);
+	button.SetColor(sf::Color::Blue);
+	button.SetHoverColor(sf::Color::Green);
+	button.SetClickColor(sf::Color::Red);
+	button.SetOnClick([]() { std::cout << "Button clicked\n"; });
+
+	InputField inputField;
+	inputField.SetPosition(150, 150);
+	inputField.SetSize(200, 50);
+	inputField.SetText("Enter password", font, 24, sf::Color::White);
+	inputField.SetColor(sf::Color::Blue);
+	inputField.SetHoverColor(sf::Color::Green);
+	inputField.SetSelectedColor(sf::Color::Red);
+	inputField.SetOnEdit([](const std::string& str) { std::cout << "Input: " << str << std::endl; });
+	inputField.SetOnEditStart([](const std::string& str) { std::cout << "Input started: " << str << std::endl; });
+	inputField.SetOnEditEnd([](const std::string& str) { std::cout << "Input ended: " << str << std::endl; });
+
+
+	while (window.isOpen())
+	{
+		mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if(event.type == sf::Event::Closed)
+				window.close();
+
+			button.HandleInput(event);
+			inputField.HandleInput(event);
+		}
+
+		button.Update(0.0f);
+		inputField.Update(0.0f);
+
+		window.clear(sf::Color::Black);
+		window.draw(title);
+		button.Draw(window);
+		inputField.Draw(window);
+		window.display();
+	}
+
+
+	/*std::string masterKey;
 	std::cout << "Enter the master key: \n";
 	std::getline(std::cin, masterKey);
 
@@ -88,7 +154,7 @@ int main()
 				std::cout << "Failed to save passwords\n";
 		}
 
-	} while (command != 0);
+	} while (command != 0);*/
 
 	return 0;
 }
