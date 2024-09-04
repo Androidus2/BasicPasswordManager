@@ -8,6 +8,7 @@ class InputField
 private:
 	sf::RectangleShape shape;
 	std::string value;
+	std::string defaultValue;
 	sf::Text text;
 	sf::Color color;
 	sf::Color hoverColor;
@@ -22,10 +23,11 @@ private:
 	void BeginEdit();
 	void EndEdit();
 public:
-	InputField();
+	InputField(const std::string& defaultValue);
 
 	void SetPosition(float x, float y);
 	void SetSize(float width, float height);
+	void SetText(const std::string& str);
 	void SetText(const std::string& str, const sf::Font& font, unsigned int size, const sf::Color& color);
 	void SetColor(const sf::Color& color);
 	void SetHoverColor(const sf::Color& color);
@@ -33,6 +35,8 @@ public:
 	void SetOnEditStart(std::function<void(const std::string&)> onEditStart);
 	void SetOnEdit(std::function<void(const std::string&)> onEdit);
 	void SetOnEditEnd(std::function<void(const std::string&)> onEditEnd);
+
+	const std::string& GetText() const;
 
 	void HandleInput(sf::Event& event);
 	void Update(float deltaTime);

@@ -32,6 +32,11 @@ void PasswordManager::RemovePassword(int index)
 	if (index >= 0 && index < passwords.size())
 		passwords.erase(passwords.begin() + index);
 }
+void PasswordManager::RemoveAllPasswords()
+{
+	passwords.clear();
+	descriptions.clear();
+}
 const std::string& PasswordManager::GetPassword(int index) const
 {
 	if (index >= 0 && index < passwords.size())
@@ -41,6 +46,10 @@ const std::string& PasswordManager::GetDescription(int index) const
 {
 	if (index >= 0 && index < descriptions.size())
 		return descriptions[index];
+}
+int PasswordManager::GetPasswordsCount() const
+{
+	return passwords.size();
 }
 
 bool PasswordManager::SavePasswords(const std::string& path) const

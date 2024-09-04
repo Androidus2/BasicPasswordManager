@@ -25,6 +25,7 @@ public:
 	void SetColor(const sf::Color& color);
 	void SetHoverColor(const sf::Color& color);
 	void SetClickColor(const sf::Color& color);
+	void SetOutline(float thickness, const sf::Color& color);
 	void SetOnClick(std::function<void()> onClick);
 
 	void HandleInput(sf::Event& event);

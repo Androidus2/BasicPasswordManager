@@ -4,8 +4,10 @@ extern sf::Vector2f mousePos;
 
 void InputField::CenterText()
 {
+	std::cout<<"Started centering text\n";
 	text.setOrigin(text.getGlobalBounds().getSize() / 2.f + text.getLocalBounds().getPosition());
 	text.setPosition(shape.getPosition().x, shape.getPosition().y);
+	std::cout<<"Finished centering text\n";
 }
 void InputField::BeginEdit()
 {
@@ -20,15 +22,17 @@ void InputField::EndEdit()
 	if(value.size() > 0)
 		text.setString(value);
 	else
-		text.setString("Enter password");
+		text.setString(defaultValue);
 	if (onEditEnd)
 		onEditEnd(value);
+	CenterText();
 }
 
-InputField::InputField()
+InputField::InputField(const std::string& defaultValue)
 {
 	isHovered = false;
 	isSelected = false;
+	this->defaultValue = defaultValue;
 }
 
 void InputField::SetPosition(float x, float y)
@@ -41,6 +45,12 @@ void InputField::SetSize(float width, float height)
 	shape.setSize(sf::Vector2f(width, height));
 	shape.setOrigin(width / 2, height / 2);
 
+	CenterText();
+}
+void InputField::SetText(const std::string& value)
+{
+	this->value = value;
+	text.setString(value);
 	CenterText();
 }
 void InputField::SetText(const std::string& str, const sf::Font& font, unsigned int size, const sf::Color& color)
@@ -76,6 +86,11 @@ void InputField::SetOnEdit(std::function<void(const std::string&)> onEdit)
 void InputField::SetOnEditEnd(std::function<void(const std::string&)> onEditEnd)
 {
 	this->onEditEnd = onEditEnd;
+}
+
+const std::string& InputField::GetText() const
+{
+	return value;
 }
 
 void InputField::HandleInput(sf::Event& event)
@@ -119,6 +134,22 @@ void InputField::HandleInput(sf::Event& event)
 			text.setString(value);
 			CenterText();
 		}
+	}
+
+	// If the input field is selected and the user presses ctrl + v then paste the clipboard text
+	if (isSelected && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::V) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+	{
+		sf::Clipboard clipboard;
+		value = clipboard.getString();
+		text.setString(value);
+		CenterText();
+	}
+
+	// If the input field is selected and the user presses ctrl + c then copy the text to the clipboard
+	if (isSelected && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+	{
+		sf::Clipboard clipboard;
+		clipboard.setString(value);
 	}
 }
 void InputField::Update(float deltaTime)

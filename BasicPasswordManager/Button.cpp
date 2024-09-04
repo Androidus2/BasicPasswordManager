@@ -48,6 +48,11 @@ void Button::SetClickColor(const sf::Color& color)
 {
 	clickColor = color;
 }
+void Button::SetOutline(float thickness, const sf::Color& color)
+{
+	shape.setOutlineThickness(thickness);
+	shape.setOutlineColor(color);
+}
 void Button::SetOnClick(std::function<void()> onClick)
 {
 	this->onClick = onClick;

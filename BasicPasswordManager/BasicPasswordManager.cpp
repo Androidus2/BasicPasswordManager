@@ -5,12 +5,19 @@
 #include "SFML/Graphics.hpp"
 #include "Button.h"
 #include "InputField.h"
+#include "PasswordRow.h"
+#include "PasswordManagerUI.h"
 
 sf::Vector2f mousePos;
+PasswordManager* passwordManager;
 
 int main()
 {
 	srand(time(NULL));
+
+	std::string masterKey;
+	std::cout << "Enter the master key: \n";
+	std::getline(std::cin, masterKey);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Basic Password Manager");
 
@@ -21,33 +28,8 @@ int main()
 		return 1;
 	}
 
-	sf::Text title;
-	title.setFont(font);
-	title.setString("Basic Password Manager");
-	title.setCharacterSize(24);
-	title.setFillColor(sf::Color::White);
-	title.setPosition(10, 10);
-
-	Button button;
-	button.SetPosition(150, 70);
-	button.SetSize(100, 50);
-	button.SetText("Add", font, 24, sf::Color::White);
-	button.SetColor(sf::Color::Blue);
-	button.SetHoverColor(sf::Color::Green);
-	button.SetClickColor(sf::Color::Red);
-	button.SetOnClick([]() { std::cout << "Button clicked\n"; });
-
-	InputField inputField;
-	inputField.SetPosition(150, 150);
-	inputField.SetSize(200, 50);
-	inputField.SetText("Enter password", font, 24, sf::Color::White);
-	inputField.SetColor(sf::Color::Blue);
-	inputField.SetHoverColor(sf::Color::Green);
-	inputField.SetSelectedColor(sf::Color::Red);
-	inputField.SetOnEdit([](const std::string& str) { std::cout << "Input: " << str << std::endl; });
-	inputField.SetOnEditStart([](const std::string& str) { std::cout << "Input started: " << str << std::endl; });
-	inputField.SetOnEditEnd([](const std::string& str) { std::cout << "Input ended: " << str << std::endl; });
-
+	passwordManager = new PasswordManager(masterKey);
+	PasswordManagerUI passwordManagerUI(&font);
 
 	while (window.isOpen())
 	{
@@ -57,18 +39,14 @@ int main()
 		{
 			if(event.type == sf::Event::Closed)
 				window.close();
-
-			button.HandleInput(event);
-			inputField.HandleInput(event);
+			passwordManagerUI.HandleInput(event);
 		}
 
-		button.Update(0.0f);
-		inputField.Update(0.0f);
+		passwordManagerUI.Update(0.0f);
 
 		window.clear(sf::Color::Black);
-		window.draw(title);
-		button.Draw(window);
-		inputField.Draw(window);
+		//window.draw(title);
+		passwordManagerUI.Draw(window);
 		window.display();
 	}
 
