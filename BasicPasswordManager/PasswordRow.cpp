@@ -2,6 +2,7 @@
 
 extern sf::Vector2i windowSize;
 extern sf::Vector2f mousePos;
+extern std::string possibleChars;
 
 void PasswordRow::PositionElements()
 {
@@ -43,6 +44,19 @@ PasswordRow::PasswordRow(sf::Font* font, int index) : descriptionField("Enter de
 	passwordField.SetHoverColor(fieldHoverColor);
 	passwordField.SetSelectedColor(fieldActiveColor);
 
+	passwordField.SetOnEditEnd([this](const std::string& text) {
+		// remove all characters that are not in the possibleChars string
+		std::string newText;
+		for (char c : text)
+		{
+			if (possibleChars.find(c) != std::string::npos)
+			{
+				newText += c;
+			}
+		}
+		passwordField.SetText(newText);
+	});
+
 	deleteButton.SetPosition(530, 10);
 	deleteButton.SetSize(30, 30);
 	deleteButton.SetText("X", *font, 20, sf::Color::White);
@@ -62,7 +76,6 @@ PasswordRow::PasswordRow(sf::Font* font, int index) : descriptionField("Enter de
 	InputField* passwordFieldPtr = &passwordField;
 	generateButton.SetOnClick([passwordFieldPtr]() {
 		std::cout << "Generate button clicked: " << std::endl;
-		std::string possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
 		std::string newPassword;
 		int length = 16;
 		for (int i = 0; i < length; i++)

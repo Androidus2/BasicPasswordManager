@@ -11,8 +11,9 @@
 sf::Vector2f mousePos;
 PasswordManager* passwordManager;
 bool blockClick = false;
-
+std::string possibleChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
 sf::Vector2i windowSize;
+bool exitProgram = false;
 
 int main()
 {
@@ -34,6 +35,12 @@ int main()
 
 	passwordManager = new PasswordManager(masterKey);
 	PasswordManagerUI passwordManagerUI(&font);
+
+	if (exitProgram)
+	{
+		std::cout << "Invalid master key!\n";
+		return 1;
+	}
 
 	while (window.isOpen())
 	{

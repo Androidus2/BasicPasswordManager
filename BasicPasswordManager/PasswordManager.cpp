@@ -41,11 +41,13 @@ const std::string& PasswordManager::GetPassword(int index) const
 {
 	if (index >= 0 && index < passwords.size())
 		return passwords[index];
+	return "";
 }
 const std::string& PasswordManager::GetDescription(int index) const
 {
 	if (index >= 0 && index < descriptions.size())
 		return descriptions[index];
+	return "";
 }
 int PasswordManager::GetPasswordsCount() const
 {

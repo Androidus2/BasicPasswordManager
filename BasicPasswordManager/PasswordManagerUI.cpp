@@ -3,6 +3,8 @@
 
 extern PasswordManager* passwordManager;
 extern sf::Vector2i windowSize;
+extern std::string possibleChars;
+extern bool exitProgram;
 
 PasswordManagerUI::PasswordManagerUI(sf::Font* font) {
 	passwordFilePath = "passwords.txt";
@@ -78,6 +80,38 @@ void PasswordManagerUI::SavePasswords() {
 }
 void PasswordManagerUI::LoadPasswords() {
 	if (passwordManager && passwordManager->LoadPasswords(passwordFilePath)) {
+		bool ok = true;
+		for (int i = 0; i < passwordManager->GetPasswordsCount(); i++)
+		{
+			const std::string& password = passwordManager->GetPassword(i);
+			const std::string& description = passwordManager->GetDescription(i);
+			//std::cout << "Password: " << password << " " << password.size() << std::endl;
+			for (int j = 0; j < password.size(); j++)
+			{
+				if (possibleChars.find(password[j]) == std::string::npos)
+				{
+					std::cout<<(int)password[j]<<std::endl;
+					ok = false;
+					break;
+				}
+			}
+			for (int j = 0; j < description.size(); j++)
+			{
+				if (description[j] > 128 || description[j] < 32)
+				{
+					ok = false;
+					break;
+				}
+			}
+		}
+
+		if (!ok)
+		{
+			std::cout << "Invalid master key!" << std::endl;
+			exitProgram = true;
+			return;
+		}
+
 		for (int i = 0; i < passwordManager->GetPasswordsCount(); i++) {
 			passwordRows.push_back(new PasswordRow(font, i));
 			passwordRows.back()->SetPosition((passwordRows.size() + 1) * 50);

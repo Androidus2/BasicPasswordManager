@@ -4,10 +4,8 @@ extern sf::Vector2f mousePos;
 
 void InputField::CenterText()
 {
-	std::cout<<"Started centering text\n";
 	text.setOrigin(text.getGlobalBounds().getSize() / 2.f + text.getLocalBounds().getPosition());
 	text.setPosition(shape.getPosition().x, shape.getPosition().y);
-	std::cout<<"Finished centering text\n";
 }
 void InputField::BeginEdit()
 {
@@ -101,6 +99,14 @@ const sf::Vector2f& InputField::GetSize() const
 }
 void InputField::HandleInput(sf::Event& event)
 {
+	// If the input field is selected and the user presses ctrl + c then copy the text to the clipboard
+	if (isSelected && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+	{
+		sf::Clipboard clipboard;
+		clipboard.setString(value);
+		return;
+	}
+
 	if (event.type == sf::Event::MouseMoved)
 	{
 		if (shape.getGlobalBounds().contains(mousePos))
@@ -149,13 +155,6 @@ void InputField::HandleInput(sf::Event& event)
 		value = clipboard.getString();
 		text.setString(value);
 		CenterText();
-	}
-
-	// If the input field is selected and the user presses ctrl + c then copy the text to the clipboard
-	if (isSelected && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
-	{
-		sf::Clipboard clipboard;
-		clipboard.setString(value);
 	}
 }
 void InputField::Update(float deltaTime)
