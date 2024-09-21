@@ -2,12 +2,12 @@
 A basic password manager written in c++, using SFML for the UI and AES-256 for the encryption.
 
 ## Features
--Encrypts all passwords using a key
--Encrypts the key using a master key, which the user has to input when using the app
--Ability to generate passwords
--Adding and removing passowrds
--Resize support
--Scrolling through the passwords using either the scroll wheel or the arrow keys
+- Encrypts all passwords using a key
+- Encrypts the key using a master key, which the user has to input when using the app
+- Ability to generate passwords
+- Adding and removing passowrds
+- Resize support
+- Scrolling through the passwords using either the scroll wheel or the arrow keys
 
 ## Installation
 This repository contains all the files necessary to run the project, but it does require Visual Studio Community with the C++ add-ons to work. After cloning, it is as simple as opening the solution file and pressing run.
