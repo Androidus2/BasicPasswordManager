@@ -22,6 +22,8 @@ public:
 	void SavePasswords();
 	void LoadPasswords();
 
+	void OnResize();
+
 	void HandleInput(sf::Event& event);
 	void Update(float deltaTime);
 	void Draw(sf::RenderWindow& window) const;

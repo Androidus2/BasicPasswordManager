@@ -33,6 +33,9 @@ InputField::InputField(const std::string& defaultValue)
 	isHovered = false;
 	isSelected = false;
 	this->defaultValue = defaultValue;
+
+	shape.setOutlineThickness(1);
+	shape.setOutlineColor(sf::Color::Black);
 }
 
 void InputField::SetPosition(float x, float y)
@@ -92,7 +95,10 @@ const std::string& InputField::GetText() const
 {
 	return value;
 }
-
+const sf::Vector2f& InputField::GetSize() const
+{
+	return shape.getSize();
+}
 void InputField::HandleInput(sf::Event& event)
 {
 	if (event.type == sf::Event::MouseMoved)

@@ -37,6 +37,7 @@ public:
 	void SetOnEditEnd(std::function<void(const std::string&)> onEditEnd);
 
 	const std::string& GetText() const;
+	const sf::Vector2f& GetSize() const;
 
 	void HandleInput(sf::Event& event);
 	void Update(float deltaTime);

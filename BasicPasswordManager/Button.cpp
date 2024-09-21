@@ -1,6 +1,7 @@
 #include "Button.h"
 
 extern sf::Vector2f mousePos;
+extern bool blockClick;
 
 void Button::CenterText()
 {
@@ -77,8 +78,11 @@ void Button::HandleInput(sf::Event& event)
 		if (event.mouseButton.button == sf::Mouse::Left && isClicked)
 		{
 			isClicked = false;
-			if (onClick)
+			if (onClick && !blockClick)
+			{
+				blockClick = true;
 				onClick();
+			}
 		}
 	}
 }

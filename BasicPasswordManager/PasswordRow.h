@@ -21,6 +21,7 @@ private:
 public:
 	PasswordRow(sf::Font* font, int index);
 
+	float GetPosition() const;
 	void SetPosition(float y);
 
 	void SetDescription(const std::string& text);
@@ -32,6 +33,8 @@ public:
 	void SetDeleteButtonCallback(std::function<void(int)> callback);
 
 	int GetIndex() const;
+
+	void OnResize();
 
 	void HandleInput(sf::Event& event);
 	void Update(float deltaTime);
